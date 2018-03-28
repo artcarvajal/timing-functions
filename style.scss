@@ -1,0 +1,185 @@
+$maxAmplitude: 350px;
+$graphRotation: -30deg;
+
+* {
+  box-sizing: border-box;
+  position: relative;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Libre Franklin";
+}
+button, input {
+  font-family: "Libre Franklin";
+}
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+              linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+              linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+  
+  perspective: 600px;
+  perspective-origin: 50% 30%;
+}
+
+.header {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.selector {
+  position: absolute;
+  left: 5px;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  z-index: 10000000;
+  
+  .subcontrols {
+    font-size: 0.8rem;
+    display: none;
+    button {
+      width: 7rem;
+    }
+    input[type="text"] {
+      width: 7rem;
+    }
+    input[type="text"], label {
+      display: block;
+    }
+    label {
+      text-align: left;
+      padding: 2px 0 ;
+      input {
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+.container-3d {
+  width: 90%;
+  height: 100%;
+  background-color: rgba(0,0,0,0);
+  
+  transform-style: preserve-3d;
+  * {
+    transform-style: preserve-3d;
+  }
+  
+  #graph {
+    perspective: 10000px;
+    width: 100%;
+    max-width: $maxAmplitude;
+    min-width: $maxAmplitude;
+    margin: 0 auto;
+    border-collapse: collapse;
+    transform: rotateY($graphRotation);
+    tbody {
+      td, th {
+        font-weight: normal;
+        font-size: 0.66rem;
+        vertical-align: top;
+        width: $maxAmplitude / 8;
+        height: $maxAmplitude / 8;
+        border: 2px solid rgba(0,0,0,0.2);
+        &:first-child {
+          border-left: 2px solid rgba(0,0,0,0.75);
+        }
+        p, span {
+          text-align: right;
+          position: absolute;
+          top: 0;
+          margin: 0;
+          padding: 0;
+        }
+        span {
+          top: unset;
+          bottom: 0;
+        }
+      }
+      th {
+        margin: 0;
+        padding: 0;
+        p {
+          text-align: right;
+          right: 0;
+        }
+      }
+      tr:nth-child(4) td {
+        border-bottom: 2px solid rgba(0,0,0,0.75);
+      }
+    }
+  }
+  thead {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    
+    td, tr {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: $maxAmplitude;
+      height: $maxAmplitude;
+      border: 10px solid rgba(182,193,244,0.8);
+      border-radius: 50%;
+      }
+    td {
+      animation: 2s linear grow infinite;
+      &::after {
+        display: block;
+        content: ' ';
+        width: 100%;
+        height: 2px;
+        background-color:rgba(128,125,203,1);
+        position: absolute;
+        left: 0;
+        top: 50%;
+      }
+      &::before {
+        display: block;
+        content: ' ';
+        width: 4px;
+        height: 100%;
+        background-color:rgba(235,241,54,0.66);
+        position: absolute;
+        top: 0;
+        left: 49%;
+      }
+    }
+    tr {
+      border: none;
+      @for $i from 1 through 17 {
+        &:nth-child(#{$i}) {
+          transform: rotateY(90deg) translateZ((-0.5 * $maxAmplitude) + (($maxAmplitude / 16) * $i) - ($maxAmplitude / 16));
+          & td {
+            animation-delay: #{$i / -17}s;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
